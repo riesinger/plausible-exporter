@@ -1,0 +1,5 @@
+/plausible-exporter
+/.env.*
+/config.yaml
+
+.DS_Store
