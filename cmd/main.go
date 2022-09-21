@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,25 +21,25 @@ func main() {
 
 	log.Println("Starting plausible-exporter")
 
-	ctx := context.Background()
-	ctx, _ = signal.NotifyContext(ctx, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	plausibleClient := &plausible.Client{
-		HostAPIBase: plausibleHost,
-		SiteID:      siteID,
-		Token:       token,
+	plausibleClients := make(map[string]*plausible.Client)
+	for _, siteID := range siteIDs {
+		plausibleClients[siteID] = &plausible.Client{HostAPIBase: plausibleHost, SiteID: siteID, Token: token}
 	}
 
-	metrics := prometheus.NewServer(siteID)
+	metrics := prometheus.NewServer(siteIDs)
 
 	updatePlausibleData := func() {
-		data, err := plausibleClient.GetTimeseriesData()
-		if err != nil {
-			log.Printf("Refreshing data failed: %v", err)
-			return
+		for _, siteID := range siteIDs {
+			data, err := plausibleClients[siteID].GetTimeseriesData()
+			if err != nil {
+				log.Printf("Refreshing data for site %s failed: %v", siteID, err)
+				return
+			}
+			metrics.UpdateDataForSite(siteID, data)
+			log.Printf("Data for site %s was refreshed from plausible", siteID)
 		}
-		metrics.UpdateData(data)
-		log.Println("Data was refreshed from plausible")
 	}
 
 	go func() {
@@ -57,7 +58,7 @@ func main() {
 
 	srv := server.New()
 	go func() {
-		if err := srv.ListenAndServe(listenAddress); err != nil {
+		if err := srv.ListenAndServe(listenAddress); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("server: %v\n", err)
 		}
 	}()

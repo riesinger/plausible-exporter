@@ -1,52 +1,42 @@
 package prometheus
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/riesinger/plausible-exporter/plausible"
 )
 
 type MetricsServer struct {
-	pageviews     prometheus.Gauge
-	visitors      prometheus.Gauge
-	bounceRate    prometheus.Gauge
-	visitDuration prometheus.Gauge
+	pageviews     *prometheus.GaugeVec
+	visitors      *prometheus.GaugeVec
+	bounceRate    *prometheus.GaugeVec
+	visitDuration *prometheus.GaugeVec
 }
 
-func NewServer(siteID string) *MetricsServer {
-	sid := strings.ReplaceAll(siteID, "-", "_")
-	sid = strings.ReplaceAll(sid, ".", "_")
-
-	pageviews := promauto.NewGauge(prometheus.GaugeOpts{
+func NewServer(siteIDs []string) *MetricsServer {
+	pageviews := promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "plausible",
-		Subsystem: sid,
 		Name:      "pageviews",
-		Help:      fmt.Sprintf("Number of page views for %s", siteID),
-	})
+		Help:      "Number of page views for a given site",
+	}, []string{"site_id"})
 
-	visitors := promauto.NewGauge(prometheus.GaugeOpts{
+	visitors := promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "plausible",
-		Subsystem: sid,
 		Name:      "visitors",
-		Help:      fmt.Sprintf("Number of visitors for %s", siteID),
-	})
+		Help:      "Number of visitors for a given site",
+	}, []string{"site_id"})
 
-	bounceRate := promauto.NewGauge(prometheus.GaugeOpts{
+	bounceRate := promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "plausible",
-		Subsystem: sid,
 		Name:      "bounce_rate",
-		Help:      fmt.Sprintf("Bounce rate for %s in %%", siteID),
-	})
+		Help:      "Bounce rate for a given site in %",
+	}, []string{"site_id"})
 
-	visitDuration := promauto.NewGauge(prometheus.GaugeOpts{
+	visitDuration := promauto.NewGaugeVec(prometheus.GaugeOpts{
 		Namespace: "plausible",
-		Subsystem: sid,
 		Name:      "visit_duration",
-		Help:      fmt.Sprintf("Average visit duration for %s in seconds", siteID),
-	})
+		Help:      "Average visit duration for a given site in seconds",
+	}, []string{"site_id"})
 
 	return &MetricsServer{
 		pageviews:     pageviews,
@@ -56,9 +46,9 @@ func NewServer(siteID string) *MetricsServer {
 	}
 }
 
-func (srv *MetricsServer) UpdateData(data *plausible.TimeseriesData) {
-	srv.pageviews.Set(float64(data.Pageviews))
-	srv.visitors.Set(float64(data.Visitors))
-	srv.bounceRate.Set(float64(data.BounceRate))
-	srv.visitDuration.Set(float64(data.VisitDuration))
+func (srv *MetricsServer) UpdateDataForSite(siteID string, data *plausible.TimeseriesData) {
+	srv.pageviews.WithLabelValues(siteID).Set(float64(data.Pageviews))
+	srv.visitors.WithLabelValues(siteID).Set(float64(data.Visitors))
+	srv.bounceRate.WithLabelValues(siteID).Set(float64(data.BounceRate))
+	srv.visitDuration.WithLabelValues(siteID).Set(float64(data.VisitDuration))
 }

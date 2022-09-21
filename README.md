@@ -16,7 +16,7 @@ services:
     image: ghcr.io/riesinger/plausible-exporter:latest
     environment:
       - PLAUSIBLE_HOST=https://plausible.io
-      - PLAUSIBLE_SITE_ID=your-web.site
+      - PLAUSIBLE_SITE_IDS=your-web.site
       - PLAUSIBLE_TOKEN=<the-token-you-created-in-plausible>
     ports:
       - 8080:8080
@@ -43,12 +43,12 @@ The exporter can be configured via a `config.yaml` file placed in `/etc/plausibl
 When put into a config file, the variable names are `snake_cased`, when set via the environment, the variables must be `UPPER_SNAKE_CASED`.
 All options can be set in the config file or environment variables, with environment variables taking precedence.
 
-| Option              | Required | Description                                         | Default        |
-| ------------------- | -------- | --------------------------------------------------- | -------------- |
-| `plausible_host`    | ✅       | The hostname and protocol of your plausible server  | -              |
-| `plausible_site_id` | ✅       | The ID of the site you want to fetch from plausible | -              |
-| `plausible_token`   | ✅       | A valid API token for your plausible server         | -              |
-| `listen_address`    | ❌       | Which host and port to listen to                    | `0.0.0.0:8080` |
+| Option               | Required | Description                                                      | Default        |
+| -------------------- | -------- | ---------------------------------------------------------------- | -------------- |
+| `plausible_host`     | ✅       | The hostname and protocol of your plausible server               | -              |
+| `plausible_site_ids` | ✅       | The IDs of the sites you want to fetch from plausible, as a list | -              |
+| `plausible_token`    | ✅       | A valid API token for your plausible server                      | -              |
+| `listen_address`     | ❌       | Which host and port to listen to                                 | `0.0.0.0:8080` |
 
 ## License
 

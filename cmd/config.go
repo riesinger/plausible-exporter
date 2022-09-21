@@ -11,7 +11,7 @@ var (
 	listenAddress string
 	plausibleHost *url.URL
 	token         string
-	siteID        string
+	siteIDs       []string
 )
 
 func readConfig() error {
@@ -43,9 +43,9 @@ func readConfig() error {
 	if token == "" {
 		return fmt.Errorf("config: no plausible token provided")
 	}
-	siteID = viper.GetString("plausible_site_id")
-	if token == "" {
-		return fmt.Errorf("config: no plausible site ID provided")
+	siteIDs = viper.GetStringSlice("plausible_site_ids")
+	if len(siteIDs) == 0 {
+		return fmt.Errorf("config: no plausible site IDs provided")
 	}
 
 	return nil
