@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 )
 
@@ -43,7 +44,8 @@ func readConfig() error {
 	if token == "" {
 		return fmt.Errorf("config: no plausible token provided")
 	}
-	siteIDs = viper.GetStringSlice("plausible_site_ids")
+	viper.UnmarshalKey("plausible_site_ids", &siteIDs, viper.DecodeHook(mapstructure.StringToSliceHookFunc(",")))
+	// siteIDs = viper.GetStringSlice("plausible_site_ids")
 	if len(siteIDs) == 0 {
 		return fmt.Errorf("config: no plausible site IDs provided")
 	}
