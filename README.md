@@ -1,5 +1,7 @@
 # plausible-exporter
 
+<img width="1438" alt="image" src="https://user-images.githubusercontent.com/6919894/193658233-18ecc4a2-52c7-4c48-b409-d315a4a44c41.png">
+
 `plausible-exporter` is a Prometheus exporter for [Plausible Analytics](https://plausible.io).
 It enables you to keep an overview of your websites statistics in Prometheus.
 
@@ -49,6 +51,17 @@ All options can be set in the config file or environment variables, with environ
 | `plausible_site_ids` | ✅       | The IDs of the sites you want to fetch from plausible, as a list | -              |
 | `plausible_token`    | ✅       | A valid API token for your plausible server                      | -              |
 | `listen_address`     | ❌       | Which host and port to listen to                                 | `0.0.0.0:8080` |
+
+### Prometheus
+
+This exporter creates 4 metrics:
+
+* `plausible_visitors` - How many visitors were on your site on the current day
+* `plausible_visit_duration` - How long an average visit to your site was (in seconds)
+* `plausible_page_views` - How many page views your site had today
+* `plausible_bounce_rate` - How many visitors left your site (in percent, 0-100)
+
+In case you've configured multiple sites to be scraped, you can differentiate between them with the `site_id` label.
 
 ## License
 
