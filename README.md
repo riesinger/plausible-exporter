@@ -56,12 +56,17 @@ All options can be set in the config file or environment variables, with environ
 
 This exporter creates 4 metrics:
 
-* `plausible_visitors` - How many visitors were on your site on the current day
-* `plausible_visit_duration` - How long an average visit to your site was (in seconds)
-* `plausible_pageviews` - How many page views your site had today
-* `plausible_bounce_rate` - How many visitors left your site (in percent, 0-100)
+- `plausible_visitors` - How many visitors were on your site on the current day
+- `plausible_visit_duration` - How long an average visit to your site was (in seconds)
+- `plausible_pageviews` - How many page views your site had today
+- `plausible_bounce_rate` - How many visitors left your site (in percent, 0-100)
 
 In case you've configured multiple sites to be scraped, you can differentiate between them with the `site_id` label.
+
+### Grafana
+
+You can use the exported metrics just like you'd use any other metric scraped by Prometheus.
+The `examples` folder contains a small [demo dashboard](./examples/grafana-dashboard.json). You can use this as a starting point for integrating the metrics into your own dashboards.
 
 ## License
 
