@@ -52,14 +52,16 @@ All options can be set in the config file or environment variables, with environ
 | `plausible_token`    | ✅       | A valid API token for your plausible server                      | -              |
 | `listen_address`     | ❌       | Which host and port to listen to                                 | `0.0.0.0:8080` |
 
+> **Note:** Config options that are lists must be comma-separated when passed as an environment variable, e.g. `PLAUSIBLE_SITE_IDS=riesinger.dev,nononsense.cooking`
+
 ### Prometheus
 
 This exporter creates 4 metrics:
 
-* `plausible_visitors` - How many visitors were on your site on the current day
-* `plausible_visit_duration` - How long an average visit to your site was (in seconds)
-* `plausible_pageviews` - How many page views your site had today
-* `plausible_bounce_rate` - How many visitors left your site (in percent, 0-100)
+- `plausible_visitors` - How many visitors were on your site on the current day
+- `plausible_visit_duration` - How long an average visit to your site was (in seconds)
+- `plausible_pageviews` - How many page views your site had today
+- `plausible_bounce_rate` - How many visitors left your site (in percent, 0-100)
 
 In case you've configured multiple sites to be scraped, you can differentiate between them with the `site_id` label.
 
