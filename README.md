@@ -65,6 +65,11 @@ This exporter creates 4 metrics:
 
 In case you've configured multiple sites to be scraped, you can differentiate between them with the `site_id` label.
 
+### Grafana
+
+You can use the exported metrics just like you'd use any other metric scraped by Prometheus.
+The `examples` folder contains a small [demo dashboard](./examples/grafana-dashboard.json). You can use this as a starting point for integrating the metrics into your own dashboards.
+
 ## License
 
 This project is MIT-licensed, see [LICENSE.md](./LICENSE.md)
