@@ -38,6 +38,12 @@ make # or "make static"
 
 For configuration see [this section](#configuration).
 
+### Kubernetes / Helm
+
+If you want to run this exporter inside a Kubernetes cluster you can use this [community contributed Helm chart](https://charts.pascaliske.dev/charts/plausible-exporter/) by [@pascaliske](https://github.com/pascaliske).
+
+For configuration see [this section](#configuration).
+
 ### Configuration
 
 The exporter can be configured via a `config.yaml` file placed in `/etc/plausible-exporter` or via environment variables.
