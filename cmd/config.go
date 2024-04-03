@@ -9,10 +9,11 @@ import (
 )
 
 var (
-	listenAddress string
-	plausibleHost *url.URL
-	token         string
-	siteIDs       []string
+	listenAddress   string
+	bearerAuthToken string
+	plausibleHost   *url.URL
+	token           string
+	siteIDs         []string
 )
 
 func readConfig() error {
@@ -49,6 +50,8 @@ func readConfig() error {
 	if len(siteIDs) == 0 {
 		return fmt.Errorf("config: no plausible site IDs provided")
 	}
+
+	bearerAuthToken = viper.GetString("bearer_auth_token")
 
 	return nil
 }
