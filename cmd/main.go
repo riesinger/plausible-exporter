@@ -57,6 +57,10 @@ func main() {
 	}()
 
 	srv := server.New()
+	if bearerAuthToken != "" {
+		srv.SetBearerAuthToken(bearerAuthToken)
+	}
+
 	go func() {
 		if err := srv.ListenAndServe(listenAddress); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("server: %v\n", err)

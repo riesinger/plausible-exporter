@@ -51,12 +51,13 @@ The exporter can be configured via a `config.yaml` file placed in `/etc/plausibl
 When put into a config file, the variable names are `snake_cased`, when set via the environment, the variables must be `UPPER_SNAKE_CASED`.
 All options can be set in the config file or environment variables, with environment variables taking precedence.
 
-| Option               | Required | Description                                                      | Default        |
-| -------------------- | -------- | ---------------------------------------------------------------- | -------------- |
-| `plausible_host`     | ✅       | The hostname and protocol of your plausible server               | -              |
-| `plausible_site_ids` | ✅       | The IDs of the sites you want to fetch from plausible, as a list | -              |
-| `plausible_token`    | ✅       | A valid API token for your plausible server                      | -              |
-| `listen_address`     | ❌       | Which host and port to listen to                                 | `0.0.0.0:8080` |
+| Option               | Required | Description                                                            | Default        |
+| -------------------- | -------- | ---------------------------------------------------------------------- | -------------- |
+| `plausible_host`     | ✅       | The hostname and protocol of your plausible server                     | -              |
+| `plausible_site_ids` | ✅       | The IDs of the sites you want to fetch from plausible, as a list       | -              |
+| `plausible_token`    | ✅       | A valid API token for your plausible server                            | -              |
+| `listen_address`     | ❌       | Which host and port to listen to                                       | `0.0.0.0:8080` |
+| `bearer_auth_token`  | ❌       | Bearer token to authorize metrics route through `Authorization` header | -              |
 
 > **Note:** Config options that are lists must be comma-separated when passed as an environment variable, e.g. `PLAUSIBLE_SITE_IDS=riesinger.dev,nononsense.cooking`
 
@@ -75,6 +76,11 @@ In case you've configured multiple sites to be scraped, you can differentiate be
 
 You can use the exported metrics just like you'd use any other metric scraped by Prometheus.
 The `examples` folder contains a small [demo dashboard](./examples/grafana-dashboard.json). You can use this as a starting point for integrating the metrics into your own dashboards.
+
+#### Authorization
+
+If you want to restrict access to the metrics endpoint, you can set the `bearer_auth_token` (`BEARER_AUTH_TOKEN` environment variable) option.
+This will require the client to send a `Authorization: Bearer <token>` header with the request.
 
 ## License
 

@@ -9,16 +9,27 @@ import (
 )
 
 type Server struct {
-	s http.Server
+	s               http.Server
+	bearerAuthToken string
 }
 
 func New() *Server {
 	return &Server{}
 }
 
+func (srv *Server) SetBearerAuthToken(token string) {
+	srv.bearerAuthToken = token
+}
+
 func (srv *Server) ListenAndServe(listenAddress string) error {
 	mux := http.NewServeMux()
-	mux.Handle("/metrics", promhttp.Handler())
+
+	if srv.bearerAuthToken != "" {
+		mux.Handle("/metrics", BearerAuthMiddleware(promhttp.Handler(), srv.bearerAuthToken))
+	} else {
+		mux.Handle("/metrics", promhttp.Handler())
+	}
+
 	srv.s = http.Server{
 		Addr:    listenAddress,
 		Handler: mux,
