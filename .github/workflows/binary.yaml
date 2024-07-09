@@ -33,5 +33,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: myapp-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: myapp-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: plausible-exporter-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: plausible-exporter-${{ matrix.goos }}-${{ matrix.goarch }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: "./plausible-exporter-*"
