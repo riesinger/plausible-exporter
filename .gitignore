@@ -1,4 +1,5 @@
 /plausible-exporter
+/plausible-exporter-*
 /.env.*
 /config.yaml
 
